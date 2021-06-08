@@ -2,10 +2,11 @@ import os.path
 import openpyxl
 
 
-def create_report(site_name):
+def create_report(site_name, pg_names):
     wb = openpyxl.Workbook()
     wb.create_sheet(f'PG Report', -1)
-    headers = ['Device Number', 'Mode PG', 'Damper Mode PG', 'Calculations PG']
+    headers = [i for i in pg_names]
+    headers.insert(0, 'Device')
     ws = wb['PG Report']
 
     for i in range(len(headers)):
@@ -25,12 +26,13 @@ def create_report(site_name):
                             files = os.listdir(path)
                             for file in range(len(files)):
                                 file_name_parts = files[file].split(sep=' - ')
-                                device, pg_inst, pg_file_name = file_name_parts[0], file_name_parts[1], file_name_parts[2]
-                                if pg_file_name == 'Mode Program.txt' or pg_file_name == 'Damper Mode Program.txt' or pg_file_name == 'Calculations PG.txt':
-                                    if device in device_list:
-                                        continue
-                                    else:
-                                        device_list.append({device: {pg_file_name: type_dir}})
+                                device, pg_inst, pg_file_name = file_name_parts[0], file_name_parts[1], file_name_parts[2].split(sep='.')
+                                for header in headers:
+                                    if pg_file_name[0] == header:
+                                        if device in device_list:
+                                            continue
+                                        else:
+                                            device_list.append({device: {pg_file_name[0]: type_dir}})
     row_count = 2
     devs = [key for item in device_list for key, value in item.items()]
     devs = list(dict.fromkeys(devs))
@@ -43,12 +45,9 @@ def create_report(site_name):
             for key, value in item.items():
                 for k, v in value.items():
                     if cell_value == key:
-                        if k == 'Mode Program.txt':
-                            ws.cell(row=row+2, column=2, value=v)
-                        elif k == 'Damper Mode Program.txt':
-                            ws.cell(row=row+2, column=3, value=v)
-                        elif k == 'Calculations PG.txt':
-                            ws.cell(row=row + 2, column=4, value=v)
+                        for h, i in enumerate(headers):
+                            if i == k:
+                                ws.cell(row=row+2, column=h+1, value=v)
     wb.save(f'PG Report - {site_name}.xlsx')
 
 

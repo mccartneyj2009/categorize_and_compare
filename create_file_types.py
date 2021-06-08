@@ -54,6 +54,6 @@ def create_file_types(site_name, differences, type_count=1):
         type_count += 1
         if type_count > 52:
             sys.exit()
-        create_file_types(site_name, type_count)
+        create_file_types(site_name, differences, type_count)
     except:
         pass

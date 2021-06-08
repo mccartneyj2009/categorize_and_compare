@@ -25,7 +25,6 @@ def string_cleaner(site_name, prev_file, current_file):
                 if line == l:
                     if string == s:
                         pass
-                        #f.write(f'Line {line} of "{prev_file["file_name"]}" and "{current_file["file_name"]}" are the same\n\n')
                     else:
                         diff_count += 1
                         diff_dict = {'oldPGLine': line, 'oldPGString': string, 'newPGLine': l, 'newPGString': s}
@@ -33,14 +32,3 @@ def string_cleaner(site_name, prev_file, current_file):
                         f.write(f'Line {line} {prev_file["file_name"]}:\n\tLine {line}: {string}\nLine {l} {current_file["file_name"]}:\n\tLine {l}: {s}\n\n')
         f.write(f'Total differences for\n\t{prev_file["file_name"]}\n\t{current_file["file_name"]}\n\tTotal:{diff_count}\n\n')
     return diff_count
-
-
-# pf = {'path_to_file': 'OSU A/BDE Extract PG.txt PGs/Type A', 'file_name': 'Device 51101 - PG80 - BDE Extract PG.txt', 'program': '//Main PG\n\n this is line 1\n\n this is line 21'}
-# cf = {'path_to_file': 'OSU A/BDE Extract PG.txt PGs/Device 51102 - PG80 - BDE Extract PG.txt', 'file_name': 'Device 51102 - PG80 - BDE Extract PG.txt', 'program': '//Main PG\n\n this is line 1     \n\n this is line 24'}
-# string_cleaner('path', pf, cf)
-
-
-    # with open(f'Differences Report - {site_name}.txt', 'a') as f:
-    #     f.write(f'Total differences for\n\t{prev_file["file_name"]}\n\t{current_file["file_name"]}\n\tTotal:{diff_count}\n{}\n\n')
-
-
